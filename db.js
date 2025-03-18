@@ -2,7 +2,12 @@ const mongoose = require("mongoose");
 
 const connectMongoDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/mockdatahadi_database", {
+        // In test environment, use the MONGODB_URI set in jest.setup.js
+        const dbURI = process.env.NODE_ENV === "test" 
+            ? process.env.MONGODB_URI 
+            : (process.env.MONGO_URI || "mongodb://localhost:27017/mockdatahadi_database");
+            
+        await mongoose.connect(dbURI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
